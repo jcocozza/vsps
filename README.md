@@ -1,6 +1,6 @@
 # VSPS
 
-VSPS stands for Very Simple Password Service.
+vsps is a Very Simple Password Service.
 
 It is a simple library for managing passwords via the CLI.
 
