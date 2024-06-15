@@ -8,8 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const accountsFile string = ".vsps.yaml"
-
 var accountsFilePath string
 
 var rootCmd = &cobra.Command{
@@ -41,10 +39,10 @@ var rootCmd = &cobra.Command{
 }
 
 func initConfig() {
-  home, err := os.UserHomeDir()
+  path, err := internal.GetFilePath()
   cobra.CheckErr(err)
 
-  accountsFilePath = home + "/" + accountsFile 
+  accountsFilePath = path 
 }
 
 
