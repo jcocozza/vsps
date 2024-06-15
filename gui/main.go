@@ -79,13 +79,25 @@ func createNew(accounts internal.Accounts, accountList *fyne.Container) *fyne.Co
 	username := widget.NewEntry()
 	password := widget.NewPasswordEntry()
 
+	password.Text, _ = internal.GeneratePassword(25, true, true, true)
+
+	check := widget.NewCheck("Custom Password", func(value bool) {
+		if value {
+			password.Text = ""	
+		} else {
+			password.Text, _ = internal.GeneratePassword(25, true, true, true)
+		}
+		password.Refresh()
+	})
+
 	form := &widget.Form{
 		Items: []*widget.FormItem{
 			{Text: "Name", Widget: name},
 			{Text: "Username", Widget: username},
 			{Text: "Password", Widget: password},
+			{Text: "", Widget: check},
 		},
-		OnSubmit: func() { 
+		OnSubmit: func() {
 			accounts.Add(internal.Account{Name: name.Text, Username: username.Text, Password: password.Text})
 			p, _ := internal.GetFilePath()
 			accounts.Write(p)
@@ -93,7 +105,7 @@ func createNew(accounts internal.Accounts, accountList *fyne.Container) *fyne.Co
 	}
 	form.Hide()
 
-	form.OnSubmit = func () {
+	form.OnSubmit = func() {
 		acct := internal.Account{Name: name.Text, Username: username.Text, Password: password.Text}
 		accounts.Add(acct)
 		p, _ := internal.GetFilePath()
@@ -102,11 +114,12 @@ func createNew(accounts internal.Accounts, accountList *fyne.Container) *fyne.Co
 
 		accountList.Add(createAccountContainer(&acct, accounts))
 	}
-	form.OnCancel = func () { form.Hide() }
+	form.OnCancel = func() { form.Hide() }
 
 	createNew := widget.NewButton("Create New Account", func() {
 		form.Show()
 	})
+
 
 	return container.NewVBox(createNew, form)
 }
@@ -119,7 +132,7 @@ func main() {
 
 	acc := createAcctList(accounts)
 
-	lbl := widget.NewLabel("Accounts")
+	lbl := widget.NewLabel("vsps account manager")
 	// Set the content of the window
 	myWindow.SetContent(container.NewVBox(lbl, acc, createNew(accounts, acc)))
 	// Show the window
