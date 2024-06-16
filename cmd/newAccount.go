@@ -22,14 +22,14 @@ var newAccount = &cobra.Command{
         var usernameInput string
         var passwordInput  string
 
-        fmt.Print("Account Name:")
+        fmt.Print("Account Name: ")
         fmt.Scanln(&acctNameInput)
 
-        fmt.Print("Username:")
+        fmt.Print("Username: ")
         fmt.Scanln(&usernameInput)
 
         if customPassword {
-            fmt.Print("Password:")
+            fmt.Print("Password: ")
             fmt.Scanln(&passwordInput)
         } else {
             var err error

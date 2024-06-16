@@ -45,19 +45,19 @@ var updateAccount = &cobra.Command{
 
         var updateAccountNameInput string
         if updateAccountName {
-            fmt.Print("Enter New Account Name:")
+            fmt.Print("Enter New Account Name: ")
             fmt.Scanln(&updateAccountNameInput)
             acct.Name = updateAccountNameInput
         }
         var updateUsernameInput string
         if updateUsername {
-            fmt.Print("Enter New Username:")
+            fmt.Print("Enter New Username: ")
             fmt.Scanln(&updateUsernameInput)
             acct.Username = updateUsernameInput
         }
         var updatePasswordInput string
         if updatePassword {
-            fmt.Print("Enter New Password:")
+            fmt.Print("Enter New Password: ")
             fmt.Scanln(&updatePasswordInput)
             acct.Password = updatePasswordInput
         }
