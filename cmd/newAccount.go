@@ -46,7 +46,7 @@ var newAccount = &cobra.Command{
             Password: passwordInput,
         }
     
-        err := account.Write(accountsFilePath)
+        err := account.Writer(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return

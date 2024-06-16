@@ -16,7 +16,7 @@ var updateAccount = &cobra.Command{
     Short: "update an account",
     Args: cobra.ExactArgs(1),
     ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-        accounts, err := internal.LoadAccounts(accountsFilePath)    
+        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)    
         fmt.Println(accounts)
         if err != nil {
             return nil, cobra.ShellCompDirectiveError
@@ -29,7 +29,7 @@ var updateAccount = &cobra.Command{
         return acctNames, cobra.ShellCompDirectiveNoFileComp
     }, 
     Run: func(cmd *cobra.Command, args []string) {
-        accounts, err := internal.LoadAccounts(accountsFilePath)
+        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
@@ -61,7 +61,7 @@ var updateAccount = &cobra.Command{
             fmt.Scanln(&updatePasswordInput)
             acct.Password = updatePasswordInput
         }
-        err0 := accounts.Write(accountsFilePath)
+        err0 := accounts.Writer(accountsFilePath, encrypted, masterpassword)
         if err0 != nil {
             fmt.Println(err0.Error())
             return

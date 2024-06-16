@@ -12,7 +12,7 @@ var deleteCommand = &cobra.Command{
     Short: "delete an account",
     Args: cobra.ExactArgs(1),
     Run: func(cmd *cobra.Command, args []string) {
-        accounts, err := internal.LoadAccounts(accountsFilePath)
+        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
@@ -24,7 +24,7 @@ var deleteCommand = &cobra.Command{
             fmt.Println(err.Error())
             return
         }
-        err = accounts.Write(accountsFilePath)
+        err = accounts.Writer(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
