@@ -12,7 +12,7 @@ var copyPasswordCommand = &cobra.Command{
     Short: "copy the password of the account to your clipboard",
     Args: cobra.ExactArgs(1),
     Run: func(cmd *cobra.Command, args []string) {
-        accounts, err := internal.LoadAccounts(accountsFilePath)
+        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
