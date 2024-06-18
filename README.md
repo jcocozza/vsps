@@ -26,3 +26,5 @@ Note that encrypted accounts are kept in a separate file from regular accounts.
 - password length
 - provide option to move accounts between encrypted and decrypted.
 - reset option in case of loss of master password
+- GUI: copy on double click
+- Copy password on account creation
