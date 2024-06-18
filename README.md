@@ -14,6 +14,8 @@ You can build the CLI tool with `go build` from the main directory.
 
 The GUI can be built with `go build` in the gui directory.
 
+Alternatively, use the go_compile script to generate several binaries.
+
 (I still need to figure out a proper way to do this)
 
 ## Encryption
