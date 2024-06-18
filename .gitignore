@@ -1,2 +1,1 @@
-go_compile.sh
-vsps_cli_*
+bin/
