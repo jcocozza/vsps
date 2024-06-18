@@ -9,6 +9,13 @@ Everything is stored locally.
 Under the hood, it is just a yaml file which can be edited directly.
 Otherwise, it's just a bit of fluff on top.
 
+## Build
+You can build the CLI tool with `go build` from the main directory.
+
+The GUI can be built with `go build` in the gui directory.
+
+(I still need to figure out a proper way to do this)
+
 ## Encryption
 vsps also offers basic encryption. 
 If you like, you can create encrypted accounts.
