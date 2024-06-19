@@ -191,6 +191,15 @@ func (accts Accounts) Get(name string) (*Account, error) {
 	}
 }
 
+// return a list of account names
+func (accts Accounts) List() []string {
+	lst := []string{}
+	for key := range accts {
+		lst = append(lst, key)
+	}
+	return lst
+}
+
 // Add an account
 func (accts Accounts) Add(acct Account) error {
 	// if acct is not in accounts list, add it

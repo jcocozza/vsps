@@ -9,6 +9,31 @@ Everything is stored locally.
 Under the hood, it is just a yaml file which can be edited directly.
 Otherwise, it's just a bit of fluff on top.
 
+## YAML
+
+vsps is just a yaml file. A basic account looks like this: 
+```yaml
+<account_name>:
+    username: <username>
+    password: <password>
+```
+
+Account Name, Username and Password are the only fields that are done by default.
+
+Arbitrary data can also be associated with an account.
+This is done in the CLI with the `-i`.
+```yaml
+<account_name>:
+    username: <username>
+    password: <password>
+    account_number: <account_number>
+    foo: bar
+    What is your favorite color: blue
+```
+
+This allows you to easily store other information with your account.
+For example, you can add security questions, credit card information, and others.
+
 ## Build
 You can build the CLI tool with `go build` from the main directory.
 
@@ -30,10 +55,10 @@ Without it, you cannot access your encrypted passwords.
 Note that encrypted accounts are kept in a separate file from regular accounts.
 
 ## To Do
-
 - Implement Unit tests for testable stuff (maybe?)
 - password length
-- provide option to move accounts between encrypted and decrypted.
-- reset option in case of loss of master password
+- provide option to move accounts between encrypted and unecrypted.
+- reset option in case of loss of master password -- simply remove the encrypted file
 - GUI: copy on double click
 - Copy password on account creation
+- Clear clipboard after copying after 30-45 sec

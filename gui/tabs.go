@@ -3,6 +3,7 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -16,9 +17,19 @@ const (
 
 // create tabs
 func makeTabs(window fyne.Window) *container.AppTabs {
+
+
 	p, _ := internal.GetFilePath(false)
 	accounts, _ := internal.AccountLoader(p,false, "")
-	c := CreateAccountsContainer(accounts, false, "")
+	//c := CreateAccountsContainer(accounts, false, "", window)
+	b := accounts.List()
+	appState := &VspsAppState{
+		Accounts: accounts,
+		IsEncrypted: false,
+		Masterpass: "",
+		BoundAccountNameList: binding.BindStringList(&b),
+	}
+	c := makeAccounts(appState, window) 
 
 	t1 := container.NewTabItemWithIcon(accountsTitle, theme.HomeIcon(), c)
 	t2 := container.NewTabItemWithIcon(encryptedAccountsTitle, theme.WarningIcon(), widget.NewLabel("awaiting password..."))
@@ -38,7 +49,10 @@ func makeTabs(window fyne.Window) *container.AppTabs {
 				if conf {
 					p, _ := internal.GetFilePath(true)
 					accountsEncrypted, _ := internal.AccountLoader(p, true, masterpass)
-					cEncrypted := CreateAccountsContainer(accountsEncrypted, true, masterpass) 
+					appState.Accounts = accountsEncrypted
+					appState.IsEncrypted = true
+
+					cEncrypted := makeAccounts(appState, window)
 					t2.Content = cEncrypted	
 				} else {
 					tabs.Select(t1)
