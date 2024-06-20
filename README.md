@@ -9,6 +9,11 @@ Everything is stored locally.
 Under the hood, it is just a yaml file which can be edited directly.
 Otherwise, it's just a bit of fluff on top.
 
+Just be sure to keep to proper yaml format if you opt to edit it directly.
+Things will break with improper formats/unexpected layouts.
+
+vsps does not support any special nesting in the yaml file.
+
 ## YAML
 
 vsps is just a yaml file. A basic account looks like this: 
@@ -28,7 +33,7 @@ This is done in the CLI with the `-i`.
     password: <password>
     account_number: <account_number>
     foo: bar
-    What is your favorite color: blue
+    What_is_your_favorite_color: blue
 ```
 
 This allows you to easily store other information with your account.
@@ -39,7 +44,7 @@ You can build the CLI tool with `go build` from the main directory.
 
 The GUI can be built with `go build` in the gui directory.
 
-Alternatively, use the go_compile script to generate several binaries.
+Alternatively, use the `go_compile` script to generate several binaries.
 
 (I still need to figure out a proper way to do this)
 
@@ -57,8 +62,8 @@ Note that encrypted accounts are kept in a separate file from regular accounts.
 ## To Do
 - Implement Unit tests for testable stuff (maybe?)
 - password length
-- provide option to move accounts between encrypted and unecrypted.
+- provide option to move accounts between encrypted and unencrypted.
 - reset option in case of loss of master password -- simply remove the encrypted file
-- GUI: copy on double click
 - Copy password on account creation
 - Clear clipboard after copying after 30-45 sec
+- Open button in GUI
