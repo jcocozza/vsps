@@ -67,5 +67,3 @@ Note that encrypted accounts are kept in a separate file from regular accounts.
 - Copy password on account creation
 - Clear clipboard after copying after 30-45 sec
 - Open button in GUI
-- Add Version to CLI
-- Add other fields in CLI
