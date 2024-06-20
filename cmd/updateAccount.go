@@ -10,6 +10,7 @@ import (
 var updateUsername bool
 var updatePassword bool
 var updateAccountName bool
+var fields []string 
 
 var updateAccount = &cobra.Command{
     Use: "update [account name]",
@@ -61,6 +62,25 @@ var updateAccount = &cobra.Command{
             fmt.Scanln(&updatePasswordInput)
             acct.Password = updatePasswordInput
         }
+   
+        if len(fields) != 0 {
+            fmt.Println("Updating other fields. Leave blank to delete.")
+        }
+        for _, field := range fields {
+            if acct.HasOtherField(field) {
+                var newFieldInput string
+                fmt.Printf("Enter New value for %s (previously was %s): ", field, acct.Other[field]) 
+                fmt.Scanln(&newFieldInput)
+                if newFieldInput == "" {
+                    acct.DeleteOtherField(field)
+                } else {
+                    acct.UpdateOtherField(field, newFieldInput)
+                }
+            } else {
+                fmt.Printf("field %s not found", field)
+            }           
+        }
+
         err0 := accounts.Writer(accountsFilePath, encrypted, masterpassword)
         if err0 != nil {
             fmt.Println(err0.Error())
@@ -73,6 +93,7 @@ func init() {
     updateAccount.Flags().BoolVarP(&updateUsername, "update-username","u", false, "update the account username")
     updateAccount.Flags().BoolVarP(&updatePassword, "update-password", "p", false, "update the account password")
     updateAccount.Flags().BoolVarP(&updateAccountName, "update-name","a", false, "update an account name")
+    updateAccount.Flags().StringSliceVarP(&fields, "update-fields", "f", []string{}, "update the value of extra fields in associated with the account. pass in a list of field names that you want to update.")
 
     rootCmd.AddCommand(updateAccount)
 }

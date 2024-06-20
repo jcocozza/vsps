@@ -15,6 +15,13 @@ type Account struct {
 	Other    map[string]string `yaml:",inline,omitempty"`
 }
 
+func (acct Account) HasOtherField(name string) bool {
+	if _, ok := acct.Other[name]; ok {
+		return true
+	}
+	return false
+}
+
 func (acct Account) AddOtherField(key, value string) error {
 	if _, ok := acct.Other[key]; !ok {
 		acct.Other[key] = value
@@ -22,6 +29,14 @@ func (acct Account) AddOtherField(key, value string) error {
 		return fmt.Errorf(fmt.Sprintf("unable to add account field. %s already has field %s", acct.Name, key))
 	}
 	return nil
+}
+
+func (acct Account) UpdateOtherField(fieldName, newFieldValue string) {
+	acct.Other[fieldName] = newFieldValue 
+}
+
+func (acct Account) DeleteOtherField(name string) {
+	delete(acct.Other, name)
 }
 
 func (a Account) MarshalYAML() (interface{}, error) {
@@ -192,9 +207,9 @@ func (accts Accounts) Get(name string) (*Account, error) {
 }
 
 // return a list of account names
-func (accts Accounts) List() []string {
+func (accts *Accounts) List() []string {
 	lst := []string{}
-	for key := range accts {
+	for key := range *accts {
 		lst = append(lst, key)
 	}
 	return lst
@@ -221,6 +236,20 @@ func (accts Accounts) Remove(name string) error {
 	} else {
 		return fmt.Errorf(fmt.Sprintf("unable to remove account. account %s does not exist", name))
 	}
+	return nil
+}
+
+// Update an account
+func (accts Accounts) UpdateAccount(acctToUpdate string, new *Account) error {
+	if !accts.Exists(acctToUpdate) {
+		return fmt.Errorf(fmt.Sprintf("cannot update %s. This account does not exist", acctToUpdate))
+	}
+	if acctToUpdate != new.Name {
+		// remove the old one if we need to update the key
+		delete(accts, acctToUpdate)
+	}
+	// set to a new one
+	accts[new.Name] = new
 	return nil
 }
 
