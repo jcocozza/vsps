@@ -1,21 +1,20 @@
 package main
 
 import (
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/app"
 )
 
-func showErrorDialog(w fyne.Window, err error) {
-	    dialog.ShowError(err, w)
-}
-
 func main() {
-	app := app.New()
-	window := app.NewWindow("vsps")
+  app := app.New()
+  window := app.NewWindow("vsps")
 
-	tabs := makeTabs(window) 
+  appState := NewAppState()
+  //acc := makeAccountsViewer(appState, window)
 
-	window.SetContent(tabs)
-	window.ShowAndRun()
+  tabs := makeTabs(window, appState)
+
+  window.SetContent(tabs)
+  window.Resize(fyne.NewSize(400,300))
+  window.ShowAndRun()
 }
