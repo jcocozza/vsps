@@ -11,6 +11,7 @@ var updateUsername bool
 var updatePassword bool
 var updateAccountName bool
 var fields []string 
+var addFields bool
 
 var updateAccount = &cobra.Command{
     Use: "update [account name]",
@@ -81,6 +82,10 @@ var updateAccount = &cobra.Command{
             }           
         }
 
+        if addFields {
+           addField(acct)
+        }
+
         err0 := accounts.Writer(accountsFilePath, encrypted, masterpassword)
         if err0 != nil {
             fmt.Println(err0.Error())
@@ -94,6 +99,7 @@ func init() {
     updateAccount.Flags().BoolVarP(&updatePassword, "update-password", "p", false, "update the account password")
     updateAccount.Flags().BoolVarP(&updateAccountName, "update-name","a", false, "update an account name")
     updateAccount.Flags().StringSliceVarP(&fields, "update-fields", "f", []string{}, "update the value of extra fields in associated with the account. pass in a list of field names that you want to update.")
+    updateAccount.Flags().BoolVarP(&addFields, "add-fields", "i", false, "add additional data fields to the account")
 
     rootCmd.AddCommand(updateAccount)
 }
