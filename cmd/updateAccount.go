@@ -17,19 +17,7 @@ var updateAccount = &cobra.Command{
     Use: "update [account name]",
     Short: "update an account",
     Args: cobra.ExactArgs(1),
-    ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)    
-        fmt.Println(accounts)
-        if err != nil {
-            return nil, cobra.ShellCompDirectiveError
-        }
-
-        acctNames := []string{}
-        for acctName := range accounts {
-            acctNames = append(acctNames, acctName)
-        }
-        return acctNames, cobra.ShellCompDirectiveNoFileComp
-    }, 
+    ValidArgsFunction: ValidAccountNames, 
     Run: func(cmd *cobra.Command, args []string) {
         accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {

@@ -12,7 +12,7 @@ import (
 var accountsFilePath string
 var masterpassword string
 
-const version string = "0.0.3"
+const version string = "v0.0.3"
 
 var rootCmd = &cobra.Command{
   Use:   "vsps",
@@ -69,6 +69,7 @@ It's just a yaml file (edit it directly if you like!) with some extra fluff buil
 }
 
 func initConfig() {
+  // load in file
   path, err := internal.GetFilePath(encrypted)
   cobra.CheckErr(err)
   accountsFilePath = path 
