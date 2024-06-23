@@ -26,7 +26,7 @@ func addField(account *internal.Account) {
 
 		account.Other[fieldNameInput] = fieldValueInput
 
-		answer, err := askYesNo()
+		answer, err := askYesNo("finished adding extra fields?")
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -56,6 +56,10 @@ var newAccount = &cobra.Command{
 		fmt.Scanln(&acctNameInput)
 
 		accts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
+		if err != nil {
+			fmt.Printf("failed to load account: %s ", err.Error())
+			return
+		}
 		if accts.Exists(acctNameInput) {
 			fmt.Printf("account %s already exists", acctNameInput)
 			return
@@ -92,6 +96,14 @@ var newAccount = &cobra.Command{
 			fmt.Println(err.Error())
 			return
 		}
+
+		err = account.CopyPassword()
+		if err != nil {
+			fmt.Println(err.Error())
+			fmt.Println("your account has still been written and saved. however, copying password failed.")
+			return
+		}
+		fmt.Printf("copied password for %s ", account.Name)
 	},
 }
 

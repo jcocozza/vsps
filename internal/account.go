@@ -38,6 +38,14 @@ func (acct Account) DeleteOtherField(name string) {
 	delete(acct.Other, name)
 }
 
+func (acct Account) CopyPassword() error {
+	err := Copy(acct.Password)	
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a Account) MarshalYAML() (interface{}, error) {
 	data := make(map[string]interface{})
 

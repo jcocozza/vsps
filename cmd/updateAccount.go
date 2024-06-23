@@ -79,6 +79,12 @@ var updateAccount = &cobra.Command{
             fmt.Println(err0.Error())
             return
         }
+
+        // if no flags are marked, tell the user they need to include flags
+        if !updateUsername && !updatePassword && !updateAccountName && !addFields && len(fields) == 0 {
+            fmt.Println("need to include flags for update to specify what to update.")
+            fmt.Println("use the following command to get flag updates:\n\tvsps update --help")
+        }
     },
 }
 

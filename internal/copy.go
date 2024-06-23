@@ -7,6 +7,10 @@ import (
   "strings"
 )
 
+func ClearClipboard() error {
+	return Copy("")
+}
+
 // Send text to the clipboard
 func Copy(text string) error {
 	var cmd *exec.Cmd

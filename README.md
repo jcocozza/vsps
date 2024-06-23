@@ -33,7 +33,6 @@ This is done in the CLI with the `-i`.
 This allows you to easily store other information with your account.
 For example, you can add security questions, credit card information, and others.
 
-
 Just be sure to keep to proper yaml format if you opt to edit it directly.
 Things will break with improper formats/unexpected layouts.
 
@@ -107,12 +106,12 @@ Without it, you cannot access your encrypted passwords.
 
 Note that encrypted accounts are kept in a separate file from regular accounts.
 
-## To Do
+If you lose your master password, you can reset by deleting the encrypted file.
+You will lose any accounts that are encrypted.
+*DO NOT LOSE YOUR MASTER PASSWORD*
+
+## To Do (not in any particular order)
 - Implement Unit tests for testable stuff (maybe?)
-- password length
-- provide option to move accounts between encrypted and unencrypted.
-- reset option in case of loss of master password -- simply remove the encrypted file
-- Copy password on account creation
 - Clear clipboard after copying after 30-45 sec
 - Open button in GUI
 

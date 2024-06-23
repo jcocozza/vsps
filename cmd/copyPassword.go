@@ -1,7 +1,7 @@
 package cmd
 
 import (
-    "fmt"
+	"fmt"
 
 	"github.com/jcocozza/vsps/internal"
 	"github.com/spf13/cobra"
@@ -26,12 +26,12 @@ var copyPasswordCommand = &cobra.Command{
             return 
         }
 
-        err = internal.Copy(acct.Password)
+        err = acct.CopyPassword()
         if err != nil {
             fmt.Println(err.Error())
             return
         }
-        fmt.Printf("successfully copied password for %s", acct.Name)
+        fmt.Printf("successfully copied password for %s.", acct.Name)
     },
 }
 

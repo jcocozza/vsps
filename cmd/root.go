@@ -9,6 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// these are global variables that are set on initialization/prerun
+// they are NOT flags
+// See initConfig() and PersistentPreRun
 var accountsFilePath string
 var masterpassword string
 
