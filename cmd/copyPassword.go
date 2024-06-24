@@ -1,7 +1,7 @@
 package cmd
 
 import (
-    "fmt"
+	"fmt"
 
 	"github.com/jcocozza/vsps/internal"
 	"github.com/spf13/cobra"
@@ -11,6 +11,7 @@ var copyPasswordCommand = &cobra.Command{
     Use: "pcopy [account name]",
     Short: "copy the password of the account to your clipboard",
     Args: cobra.ExactArgs(1),
+    ValidArgsFunction: ValidAccountNames,
     Run: func(cmd *cobra.Command, args []string) {
         accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
@@ -25,12 +26,12 @@ var copyPasswordCommand = &cobra.Command{
             return 
         }
 
-        err = internal.Copy(acct.Password)
+        err = acct.CopyPassword()
         if err != nil {
             fmt.Println(err.Error())
             return
         }
-        fmt.Printf("successfully copied password for %s", acct.Name)
+        fmt.Printf("successfully copied password for %s.", acct.Name)
     },
 }
 

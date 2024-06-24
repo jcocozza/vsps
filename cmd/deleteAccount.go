@@ -11,6 +11,7 @@ var deleteCommand = &cobra.Command{
     Use: "delete [account name]",
     Short: "delete an account",
     Args: cobra.ExactArgs(1),
+    ValidArgsFunction: ValidAccountNames,
     Run: func(cmd *cobra.Command, args []string) {
         accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {

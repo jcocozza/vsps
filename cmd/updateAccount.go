@@ -11,24 +11,13 @@ var updateUsername bool
 var updatePassword bool
 var updateAccountName bool
 var fields []string 
+var addFields bool
 
 var updateAccount = &cobra.Command{
     Use: "update [account name]",
     Short: "update an account",
     Args: cobra.ExactArgs(1),
-    ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-        accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)    
-        fmt.Println(accounts)
-        if err != nil {
-            return nil, cobra.ShellCompDirectiveError
-        }
-
-        acctNames := []string{}
-        for acctName := range accounts {
-            acctNames = append(acctNames, acctName)
-        }
-        return acctNames, cobra.ShellCompDirectiveNoFileComp
-    }, 
+    ValidArgsFunction: ValidAccountNames, 
     Run: func(cmd *cobra.Command, args []string) {
         accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
@@ -81,10 +70,20 @@ var updateAccount = &cobra.Command{
             }           
         }
 
+        if addFields {
+           addField(acct)
+        }
+
         err0 := accounts.Writer(accountsFilePath, encrypted, masterpassword)
         if err0 != nil {
             fmt.Println(err0.Error())
             return
+        }
+
+        // if no flags are marked, tell the user they need to include flags
+        if !updateUsername && !updatePassword && !updateAccountName && !addFields && len(fields) == 0 {
+            fmt.Println("need to include flags for update to specify what to update.")
+            fmt.Println("use the following command to get flag updates:\n\tvsps update --help")
         }
     },
 }
@@ -94,6 +93,7 @@ func init() {
     updateAccount.Flags().BoolVarP(&updatePassword, "update-password", "p", false, "update the account password")
     updateAccount.Flags().BoolVarP(&updateAccountName, "update-name","a", false, "update an account name")
     updateAccount.Flags().StringSliceVarP(&fields, "update-fields", "f", []string{}, "update the value of extra fields in associated with the account. pass in a list of field names that you want to update.")
+    updateAccount.Flags().BoolVarP(&addFields, "add-fields", "i", false, "add additional data fields to the account")
 
     rootCmd.AddCommand(updateAccount)
 }

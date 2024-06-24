@@ -9,13 +9,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// these are global variables that are set on initialization/prerun
+// they are NOT flags
+// See initConfig() and PersistentPreRun
 var accountsFilePath string
 var masterpassword string
+
+const version string = "v0.0.3"
 
 var rootCmd = &cobra.Command{
   Use:   "vsps",
   Short: "vsps is your Very Simple Password Manager",
-  Long: "vsps in your Very Simple Password Manager. It's just a yaml file (edit it directly if you like!) with some extra fluff built on top of it.",
+  Long: `vsps in your Very Simple Password Manager. 
+It's just a yaml file (edit it directly if you like!) with some extra fluff built on top of it.`,
+  Version: version,
   Run: func(cmd *cobra.Command, args []string) {
     accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
     if err != nil {
@@ -27,15 +34,15 @@ var rootCmd = &cobra.Command{
       for _, acct := range accounts {
         acct.Print()
       }
-    }
-
-    if showAccount != "" {
+    } else if showAccount != "" {
       acct, err := accounts.Get(showAccount)
       if err != nil {
         fmt.Println(err.Error())
         return
       }
       acct.Print()
+    } else {
+      cmd.Help()  
     }
   },
   // ask for the master password when encrypted flag is included
@@ -65,6 +72,7 @@ var rootCmd = &cobra.Command{
 }
 
 func initConfig() {
+  // load in file
   path, err := internal.GetFilePath(encrypted)
   cobra.CheckErr(err)
   accountsFilePath = path 

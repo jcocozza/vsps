@@ -10,16 +10,18 @@ import (
 const yes = "y"
 const no = "n"
 const please = "Please enter 'yes' or 'no'"
+const yesno = "(yes/no): "
 
 // return y, n or request yes or no
-func askYesNo() (string, error) {
+// only include the question. "(yes/no)" will be added to the question.
+func askYesNo(question string) (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Print("finished adding extra fields? (yes/no): ")
+		fmt.Print(question + " " + yesno)
 		answer, err := reader.ReadString('\n')
 		if err != nil {
-			return "", fmt.Errorf("Error reading input: %w", err)
+			return "", fmt.Errorf("error reading input: %w", err)
 		}
 
 		answer = strings.TrimSpace(answer)
