@@ -78,7 +78,7 @@ source /path/to/completion/vsps.bash
 ### Zsh
 To persist add the following 2 lines to your `.zshrc`
 ```zsh
-echo "autoload -U compinit; compinit" 
+autoload -U compinit; compinit 
 source /path/to/completion/vsps.zsh
 ```
 
