@@ -1,7 +1,7 @@
 # VSPS
 vsps is a Very Simple Password Service.
 
-It is primarily focused on being a CLI tool for managing passwords. 
+It is primarily focused on being a CLI tool for managing passwords.
 (There is a basic gui, but it will not be supported in the same way the CLI will be)
 
 Everything is stored locally.
@@ -10,7 +10,7 @@ Under the hood, it is just a yaml file which can be edited directly.
 Otherwise, it's just a bit of fluff on top.
 
 ## YAML
-vsps is just a yaml file. A basic account looks like this: 
+vsps is just a yaml file. A basic account looks like this:
 ```yaml
 <account_name>:
     username: <username>
@@ -78,7 +78,7 @@ source /path/to/completion/vsps.bash
 ### Zsh
 To persist add the following 2 lines to your `.zshrc`
 ```zsh
-autoload -U compinit; compinit 
+autoload -U compinit; compinit
 source /path/to/completion/vsps.zsh
 ```
 
@@ -96,12 +96,12 @@ $vspsCompletion = "$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profil
 ```
 
 ## Encryption
-vsps also offers basic encryption. 
+vsps also offers basic encryption.
 If you like, you can create encrypted accounts.
 In the CLI, this is via the `-e` flag. In the GUI, simply select the 'encrypted accounts' tab to manage your encrypted accounts.
 
 To encrypt accounts, you will need to provide a master password. This will NOT be persisted ANYWHERE.
-Without it, you cannot access your encrypted passwords. 
+Without it, you cannot access your encrypted passwords.
 *DO NOT LOSE YOUR MASTER PASSWORD*
 
 Note that encrypted accounts are kept in a separate file from regular accounts.
@@ -124,3 +124,10 @@ For example: `vsps_cli_darwin_amd64`.
 Proper naming in the releases is important because the updater will check the github api for the latest release and will use these formats to update.
 
 As of `v0.0.3`, the CLI has an updater. The GUI does not. (It may never. I'm not nearly as interested in working on the gui)
+
+## Caveats
+Account names with spaces in them need to be surrounded with '' when accessing them in the terminal.
+For example, if I want to get my account named foo bar then I need to do: `vsps -s 'foo bar'`.
+This is because when reading in from args the cli thinks the entry ends when it encounters the space character.
+
+'' should NOT need to be used when creating and updating accounts. Whenever a user is prompted for input, the use of a bufio.Reader means that it can read after it encounters a space character.

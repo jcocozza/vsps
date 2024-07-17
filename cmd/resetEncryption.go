@@ -11,7 +11,7 @@ import (
 var resetEncryption = &cobra.Command{
     Use: "reset-encryption",
     Short: "if you forgot your master password, you can reset the encrypted file",
-    Long: `if you forgot your master password, you can reset the encrypted file. 
+    Long: `if you forgot your master password, you can reset the encrypted file.
 this will delete your encrypted file, removing any possibility of retrieving your encrypted passwords.
 non-encrypted passwords will be unaffected.
 the encrypted flag is not required for this command.`,

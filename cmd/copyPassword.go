@@ -18,12 +18,11 @@ var copyPasswordCommand = &cobra.Command{
             fmt.Println(err.Error())
             return
         }
-        
         acctName := args[0]
         acct, err := accounts.Get(acctName)
         if err != nil {
             fmt.Println(err.Error())
-            return 
+            return
         }
 
         err = acct.CopyPassword()

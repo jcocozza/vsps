@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/jcocozza/vsps/internal"
@@ -10,9 +12,10 @@ import (
 
 
 func searchForAccount(accts internal.Accounts) []string {
-    var searchInput string
+    reader := bufio.NewReader(os.Stdin)
+
     fmt.Print("Search for Account: ")
-    fmt.Scanln(&searchInput)
+    searchInput, _ := readInput(reader)
 
     lst := accts.Search(searchInput)
     if len(lst) == 0 {
@@ -25,22 +28,21 @@ var searchAccount = &cobra.Command{
     Use: "search",
     Short: "search for an account",
     Run: func(cmd *cobra.Command, args []string) {
-
+        reader := bufio.NewReader(os.Stdin)
         accts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
         }
-        
-        lst := []string{} 
+
+        lst := []string{}
         for len(lst) == 0 {
-            lst = searchForAccount(accts)     
+            lst = searchForAccount(accts)
         }
         fmt.Println(strings.Join(lst, ", "))
 
-        var acctName string
         fmt.Print("enter acct: ")
-        fmt.Scanln(&acctName)
+        acctName, _ := readInput(reader)
         acct, err := accts.Get(acctName)
         if err != nil {
             fmt.Println(err.Error())

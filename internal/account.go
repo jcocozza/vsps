@@ -31,7 +31,7 @@ func (acct Account) AddOtherField(key, value string) error {
 }
 
 func (acct Account) UpdateOtherField(fieldName, newFieldValue string) {
-	acct.Other[fieldName] = newFieldValue 
+	acct.Other[fieldName] = newFieldValue
 }
 
 func (acct Account) DeleteOtherField(name string) {
@@ -39,7 +39,7 @@ func (acct Account) DeleteOtherField(name string) {
 }
 
 func (acct Account) CopyPassword() error {
-	err := Copy(acct.Password)	
+	err := Copy(acct.Password)
 	if err != nil {
 		return err
 	}

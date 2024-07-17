@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
 	"github.com/jcocozza/vsps/internal"
 	"github.com/spf13/cobra"
@@ -10,22 +12,24 @@ import (
 var updateUsername bool
 var updatePassword bool
 var updateAccountName bool
-var fields []string 
+var fields []string
 var addFields bool
 
 var updateAccount = &cobra.Command{
     Use: "update [account name]",
     Short: "update an account",
     Args: cobra.ExactArgs(1),
-    ValidArgsFunction: ValidAccountNames, 
+    ValidArgsFunction: ValidAccountNames,
     Run: func(cmd *cobra.Command, args []string) {
+        reader := bufio.NewReader(os.Stdin)
+
         accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
         if err != nil {
             fmt.Println(err.Error())
             return
         }
 
-        accountName := args[0] 
+        accountName := args[0]
 
         acct, err := accounts.Get(accountName)
         if err != nil {
@@ -33,33 +37,29 @@ var updateAccount = &cobra.Command{
             return
         }
 
-        var updateAccountNameInput string
         if updateAccountName {
             fmt.Print("Enter New Account Name: ")
-            fmt.Scanln(&updateAccountNameInput)
+            updateAccountNameInput, _ := readInput(reader)
             acct.Name = updateAccountNameInput
         }
-        var updateUsernameInput string
         if updateUsername {
             fmt.Print("Enter New Username: ")
-            fmt.Scanln(&updateUsernameInput)
+            updateUsernameInput, _ := readInput(reader)
             acct.Username = updateUsernameInput
         }
-        var updatePasswordInput string
         if updatePassword {
             fmt.Print("Enter New Password: ")
-            fmt.Scanln(&updatePasswordInput)
+            updatePasswordInput, _ := readInput(reader)
             acct.Password = updatePasswordInput
         }
-   
+
         if len(fields) != 0 {
             fmt.Println("Updating other fields. Leave blank to delete.")
         }
         for _, field := range fields {
             if acct.HasOtherField(field) {
-                var newFieldInput string
-                fmt.Printf("Enter New value for %s (previously was %s): ", field, acct.Other[field]) 
-                fmt.Scanln(&newFieldInput)
+                fmt.Printf("Enter New value for %s (previously was %s): ", field, acct.Other[field])
+                newFieldInput, _ := readInput(reader)
                 if newFieldInput == "" {
                     acct.DeleteOtherField(field)
                 } else {
@@ -67,7 +67,7 @@ var updateAccount = &cobra.Command{
                 }
             } else {
                 fmt.Printf("field %s not found", field)
-            }           
+            }
         }
 
         if addFields {

@@ -45,6 +45,10 @@ func loadAccounts(filepath string) (Accounts, error) {
 	for key, account := range accounts {
 		account.Name = key
 		accounts[key] = account
+
+		if account.Other == nil {
+			account.Other = make(map[string]string)
+		}
 	}
 	return accounts, nil
 }
@@ -77,6 +81,10 @@ func loadEncryptedAccounts(filepath, masterpass string) (Accounts, error) {
 	for key, account := range accounts {
 		account.Name = key
 		accounts[key] = account
+
+		if account.Other == nil {
+			account.Other = make(map[string]string)
+		}
 	}
 	return accounts, nil
 }

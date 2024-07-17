@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
 	"github.com/jcocozza/vsps/internal"
 	"github.com/spf13/cobra"
@@ -15,14 +17,13 @@ var excludeSpecialChars bool
 var addExtra bool
 
 func addField(account *internal.Account) {
+	reader := bufio.NewReader(os.Stdin)
 	adding := true
 	for {
-		var fieldNameInput string
-		var fieldValueInput string
 		fmt.Print("account field name: ")
-		fmt.Scanln(&fieldNameInput)
+		fieldNameInput, _ := readInput(reader)
 		fmt.Print(fieldNameInput + " value: ")
-		fmt.Scanln(&fieldValueInput)
+		fieldValueInput, _ := readInput(reader)
 
 		account.Other[fieldNameInput] = fieldValueInput
 
@@ -48,13 +49,10 @@ var newAccount = &cobra.Command{
 	Use:   "new",
 	Short: "create a new account",
 	Run: func(cmd *cobra.Command, args []string) {
-		var acctNameInput string
-		var usernameInput string
-		var passwordInput string
+		reader := bufio.NewReader(os.Stdin)
 
 		fmt.Print("Account Name: ")
-		fmt.Scanln(&acctNameInput)
-
+		acctNameInput, _ := readInput(reader)
 		accts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)
 		if err != nil {
 			fmt.Printf("failed to load account: %s ", err.Error())
@@ -66,11 +64,12 @@ var newAccount = &cobra.Command{
 		}
 
 		fmt.Print("Username: ")
-		fmt.Scanln(&usernameInput)
+		usernameInput, _ := readInput(reader)
 
+		var passwordInput string
 		if customPassword {
 			fmt.Print("Password: ")
-			fmt.Scanln(&passwordInput)
+			passwordInput, _ = readInput(reader)
 		} else {
 			var err error
 			passwordInput, err = internal.GeneratePassword(passwordLength, !excludeSpecialChars, !excludeDigits, !excludeCaps)
