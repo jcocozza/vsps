@@ -37,7 +37,12 @@ It's just a yaml file (edit it directly if you like!) with some extra fluff buil
     } else if showAccount != "" {
       acct, err := accounts.Get(showAccount)
       if err != nil {
-        fmt.Println(err.Error())
+        similar := accounts.FindSimilar(showAccount)
+        if len(similar) != 0 {
+          fmt.Printf("Nothing found. Perhaps you meant: %v\n", similar)
+        } else {
+          fmt.Println(err.Error())
+        }
         return
       }
       acct.Print()
@@ -49,7 +54,6 @@ It's just a yaml file (edit it directly if you like!) with some extra fluff buil
   PersistentPreRun: func(cmd *cobra.Command, args []string) {
     reader := bufio.NewReader(os.Stdin)
     if encrypted {
-
       _, err := os.Stat(accountsFilePath)
       if err != nil {
         if errors.Is(err, os.ErrNotExist) { // if the encrypted file DNE, then explain the master pass to user

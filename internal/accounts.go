@@ -235,6 +235,22 @@ func (accts Accounts) Search(search string) []string {
 	return result
 }
 
+func (accts Accounts) FindSimilar(search string) []string {
+	// levenshtein distance threshold
+	const threshold int = 3
+
+	lst := accts.List()
+
+	result := []string{}
+	for _, name := range lst {
+		levenDist := levenshteinDistance(search, name)
+		if levenDist <= threshold {
+			result = append(result, name)
+		}
+	}
+	return result
+}
+
 // check for duplicate passwords
 //
 // return a map of password : acct names
