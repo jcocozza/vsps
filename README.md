@@ -118,8 +118,8 @@ You will lose any accounts that are encrypted.
 ## Versioning and Releases
 For updating purposes all releases are of the form `vX.Y.Z`.
 
-Each binary will be named in the following format: `vsps_*_<OS>_<ARCH>`.
-For example: `vsps_cli_darwin_amd64`.
+Each binary will be named in the following format: `vsps_*_<OS>_<ARCH>_<version>`.
+For example: `vsps_cli_darwin_amd64_v0.0.1`.
 
 Proper naming in the releases is important because the updater will check the github api for the latest release and will use these formats to update.
 
