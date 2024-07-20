@@ -131,3 +131,7 @@ For example, if I want to get my account named foo bar then I need to do: `vsps 
 This is because when reading in from args the cli thinks the entry ends when it encounters the space character.
 
 '' should NOT need to be used when creating and updating accounts. Whenever a user is prompted for input, the use of a bufio.Reader means that it can read after it encounters a space character.
+
+## Apple Users
+Be aware that you will probably need allow vsps to open in your settings.
+You will probably want to put the binary in `/usr/local/bin` or add it to your path.
