@@ -88,8 +88,8 @@ var newAccount = &cobra.Command{
 		}
 
 		if addExtra {
-		    addField(&account)
-        }
+			addField(&account)
+		}
 
 		err = account.Writer(accountsFilePath, encrypted, masterpassword)
 		if err != nil {

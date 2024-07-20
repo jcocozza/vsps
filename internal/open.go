@@ -1,9 +1,9 @@
 package internal
 
 import (
-  "fmt"
-  "os/exec"
-  "runtime"
+	"fmt"
+	"os/exec"
+	"runtime"
 )
 
 // Open a file in the default editor based on OS

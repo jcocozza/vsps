@@ -1,10 +1,10 @@
 package internal
 
 import (
-  "fmt"
-  "os/exec"
-  "runtime"
-  "strings"
+	"fmt"
+	"os/exec"
+	"runtime"
+	"strings"
 )
 
 func ClearClipboard() error {
@@ -30,11 +30,11 @@ func Copy(text string) error {
 			cmd.Stdin = strings.NewReader(text)
 		}
 	default:
-        return fmt.Errorf("failed to copy: unsupported platform")
+		return fmt.Errorf("failed to copy: unsupported platform")
 	}
 
 	if err := cmd.Run(); err != nil {
-        return fmt.Errorf("failed to copy: %w", err)
+		return fmt.Errorf("failed to copy: %w", err)
 	}
-    return nil
+	return nil
 }

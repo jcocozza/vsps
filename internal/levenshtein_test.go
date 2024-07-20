@@ -4,8 +4,8 @@ import "testing"
 
 func TestLevenshtein(t *testing.T) {
 	tests := []struct {
-		name           string
-		a, b string
+		name     string
+		a, b     string
 		expected int
 	}{
 		{"kitten, sitting", "kitten", "sitting", 3},

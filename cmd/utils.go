@@ -6,9 +6,9 @@ import "bufio"
 //
 // return the read string (without the '\n' character)
 func readInput(reader *bufio.Reader) (string, error) {
-    input, err := reader.ReadString('\n')
-    if err != nil {
-        return "", err
-    }
-    return input[:len(input) - 1], nil
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+	return input[:len(input)-1], nil
 }

@@ -1,10 +1,10 @@
 package cmd
 
 import (
-    "fmt"
-    "bufio"
-    "os"
-    "strings"
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
 )
 
 const yes = "y"
