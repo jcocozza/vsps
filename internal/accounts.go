@@ -45,6 +45,10 @@ func loadAccounts(filepath string) (Accounts, error) {
 	for key, account := range accounts {
 		account.Name = key
 		accounts[key] = account
+
+		if account.Other == nil {
+			account.Other = make(map[string]string)
+		}
 	}
 	return accounts, nil
 }
@@ -77,6 +81,10 @@ func loadEncryptedAccounts(filepath, masterpass string) (Accounts, error) {
 	for key, account := range accounts {
 		account.Name = key
 		accounts[key] = account
+
+		if account.Other == nil {
+			account.Other = make(map[string]string)
+		}
 	}
 	return accounts, nil
 }
@@ -217,7 +225,7 @@ func (accts Accounts) writeEncrypted(filepath, masterpass string) error {
 // looks for an account based on its name
 func (accts Accounts) Search(search string) []string {
 	lst := accts.List()
-	
+
 	result := []string{}
 	for _, name := range lst {
 		if strings.Contains(name, search) {
@@ -225,4 +233,50 @@ func (accts Accounts) Search(search string) []string {
 		}
 	}
 	return result
+}
+
+func (accts Accounts) FindSimilar(search string) []string {
+	// levenshtein distance threshold
+	const threshold int = 3
+
+	lst := accts.List()
+
+	result := []string{}
+	for _, name := range lst {
+		levenDist := levenshteinDistance(search, name)
+		if levenDist <= threshold {
+			result = append(result, name)
+		}
+	}
+	return result
+}
+
+// check for duplicate passwords
+//
+// return a map of password : acct names
+// does not include accounts with no password
+func (accts Accounts) CheckDuplicatePasswords() map[string][]string {
+	passwordMap := make(map[string][]string)
+
+	for name, acct := range accts {
+		if acct.Password == "" {
+			continue
+		}
+		// check if password is in map.
+		// if so, add to list
+		// otherwise create a new entry in map
+		if lst, ok := passwordMap[acct.Password]; ok {
+			passwordMap[acct.Password] = append(lst, name)
+		} else {
+			passwordMap[acct.Password] = []string{name}
+		}
+	}
+
+	for password, acctList := range passwordMap {
+		if len(acctList) == 1 {
+			delete(passwordMap, password)
+		}
+	}
+
+	return passwordMap
 }
