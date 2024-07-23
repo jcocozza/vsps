@@ -46,6 +46,14 @@ func (acct Account) CopyPassword() error {
 	return nil
 }
 
+func (acct Account) CopyUsername() error {
+	err := Copy(acct.Username)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a Account) MarshalYAML() (interface{}, error) {
 	data := make(map[string]interface{})
 
