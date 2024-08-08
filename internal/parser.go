@@ -59,7 +59,7 @@ func (p *parser) consumeAccount() (Account, error) {
 		} else {
 			err := acct.AddOtherField(acctParamName.value, acctParamValue.value)
 			if err != nil {
-				return Account{}, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v", err)
+				return Account{}, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v %v", err, p.currToken.pos)
 			}
 		}
 		if p.currToken.kind != NESTER {
@@ -81,7 +81,7 @@ func (p *parser) parse() (Accounts, error) {
 		}
 		err = accounts.Add(acct)
 		if err != nil {
-			return nil, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v", err)
+			return nil, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v %v", err, p.currToken.pos)
 		}
 	}
 	return accounts, nil
