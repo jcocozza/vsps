@@ -1,0 +1,12 @@
+my_acct:
+  foo: bar
+  bax: bax
+  username: user
+  password: pass
+my_other_acct:
+  username: foo
+  password: bar
+iso_acct:
+  username: foo
+iso_acct:
+  username: foo

@@ -5,8 +5,6 @@ import (
 	"io"
 	"os"
 	"strings"
-
-	"gopkg.in/yaml.v3"
 )
 
 type Accounts map[string]*Account
@@ -24,20 +22,7 @@ func AccountLoader(filepath string, isEncrypted bool, masterpass string) (Accoun
 
 // read in accounts from the passed file path
 func loadAccounts(filepath string) (Accounts, error) {
-	accounts := make(Accounts)
-
-	file, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	bytes, err := io.ReadAll(file)
-	if err != nil {
-		return nil, err
-	}
-
-	err0 := yaml.Unmarshal(bytes, &accounts)
+	accounts, err0 := ReadAndParse(filepath)
 	if err0 != nil {
 		return nil, err0
 	}
@@ -73,7 +58,7 @@ func loadEncryptedAccounts(filepath, masterpass string) (Accounts, error) {
 		return nil, err
 	}
 
-	err0 := yaml.Unmarshal(decryptedBytes, &accounts)
+	err0 := Unmarshal(decryptedBytes, &accounts)
 	if err0 != nil {
 		return nil, err0
 	}

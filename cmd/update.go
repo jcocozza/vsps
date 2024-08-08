@@ -83,7 +83,7 @@ func downloadAndReplaceBinary(url string) error {
 var updateVsps = &cobra.Command{
 	Use:   "update-vsps",
 	Short: "update vsps to the latest version",
-	Long: `update vsps to the latest version. this will not touch the underlying yaml file.
+	Long: `update vsps to the latest version. this will not touch the underlying al file.
 even if the update goes wrong, your infomation will be fine.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		lastestRelease, downloadURL, err := getLatestReleaseInfo()
