@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jcocozza/vsps/internal"
 )
 
@@ -26,21 +28,17 @@ func (p *parser) consume() {
 	}
 }
 
-func (p *parser) peek() token {
-	return p.tokens[p.loc+1]
-}
-
-func (p *parser) consumeAccount() internal.Account {
+func (p *parser) consumeAccount() (internal.Account, error) {
 	name := p.currToken
 	p.consume() // consume name
 
 	if p.currToken.kind != DELIM {
-		panic("expected delimeter after account name")
+		return internal.Account{}, fmt.Errorf("%v - expected delimeter after account name", p.currToken.pos)
 	}
 	p.consume() // consume delimeter
 
 	if p.currToken.kind != NESTER {
-		panic("expected nested account information")
+		return internal.Account{}, fmt.Errorf("%v - expected nested account information", p.currToken.pos)
 	}
 	p.consume() // consume nesting whitespace
 
@@ -54,7 +52,7 @@ func (p *parser) consumeAccount() internal.Account {
 		acctParamName := p.currToken
 		p.consume()
 		if p.currToken.kind != DELIM {
-			panic("expected delimeter after param name")
+			return internal.Account{}, fmt.Errorf("%v - expected delimeter after parameter name", p.currToken.pos)
 		}
 		p.consume() // consume delimeter
 		acctParamValue := p.currToken
@@ -71,24 +69,27 @@ func (p *parser) consumeAccount() internal.Account {
 			}
 		}
 		if p.currToken.kind != NESTER {
-			return acct
+			return acct, nil
 		}
 		p.consume() // consume the nester
 	}
 }
 
-func (p *parser) Parse() internal.Accounts {
+func (p *parser) Parse() (internal.Accounts, error) {
 	if p.currToken.kind != IDENTIFIER {
-		panic("unable to parse when identifier is not first element in file")
+		return nil, fmt.Errorf("%v - unable to parse when identifier is not first element in file", p.currToken.pos)
 	}
 
 	accounts := make(internal.Accounts)
 	for p.loc < len(p.tokens) {
-		acct := p.consumeAccount()
-		err := accounts.Add(acct)
+		acct, err := p.consumeAccount()
+		if err != nil {
+			return nil, err
+		}
+		err = accounts.Add(acct)
 		if err != nil {
 			panic(err)
 		}
 	}
-	return accounts
+	return accounts, nil
 }

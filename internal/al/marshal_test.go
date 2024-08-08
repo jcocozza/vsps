@@ -8,12 +8,11 @@ import (
 
 func TestMarshal(t *testing.T) {
 	tests := []struct {
-		name string
-		input internal.Account
+		name    string
+		input   internal.Account
 		wantErr bool
-		want   []byte
+		want    []byte
 	}{
-		// TODO: Add test cases.
 		{"test1", internal.Account{Name: "my account", Username: "user", Password: "pass"}, false, []byte("my account:\n    username: user\n    password: pass\n")},
 	}
 	for _, tt := range tests {
