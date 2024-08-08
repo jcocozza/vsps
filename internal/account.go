@@ -106,8 +106,8 @@ func (acct Account) writeEncrypted(filepath, masterpass string) error {
 // print the account in proper format for terminal
 func (acct Account) Print() {
 	fmt.Printf("%s\n", acct.Name)
-	fmt.Printf("  Username: %s\n", acct.Username)
-	fmt.Printf("  Password: %s\n", acct.Password)
+	fmt.Printf("  username: %s\n", acct.Username)
+	fmt.Printf("  password: %s\n", acct.Password)
 	for key, value := range acct.Other {
 		fmt.Printf("  %s: %s\n", key, value)
 	}
