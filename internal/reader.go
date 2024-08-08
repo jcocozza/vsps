@@ -1,13 +1,11 @@
-package main
+package internal
 
 import (
 	"bufio"
 	"os"
-
-	"github.com/jcocozza/vsps/internal"
 )
 
-func Read(path string) (internal.Accounts, error) {
+func ReadAndParse(path string) (Accounts, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err

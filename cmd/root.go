@@ -22,7 +22,7 @@ var rootCmd = &cobra.Command{
 	Use:   "vsps",
 	Short: "vsps is your Very Simple Password Manager",
 	Long: `vsps is your Very Simple Password Manager.
-It's just a yaml file (edit it directly if you like!) with some extra fluff built on top of it.`,
+It's just a simple file (edit it directly if you like!) with some extra fluff built on top of it.`,
 	Version: version,
 	Run: func(cmd *cobra.Command, args []string) {
 		accounts, err := internal.AccountLoader(accountsFilePath, encrypted, masterpassword)

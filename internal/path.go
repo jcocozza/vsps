@@ -2,10 +2,10 @@ package internal
 
 import "os"
 
-const accountsFile string = ".vsps.yaml"
-const encryptedAccountsFile string = ".vsps.encrypted.yaml"
+const accountsFile string = ".vsps.al"
+const encryptedAccountsFile string = ".vsps.encrypted.al"
 
-// get the path of the vsps yaml
+// get the path of the vsps file
 func GetFilePath(encrypted bool) (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -25,7 +25,7 @@ func Backup(masterpass string, encrypted bool) error {
 	if err != nil {
 		return err
 	}
-	downloads := home + "/Downloads/vsps-backup.yaml"
+	downloads := home + "/Downloads/vsps-backup.al"
 	vspsPath, err := GetFilePath(encrypted)
 	if err != nil {
 		return err

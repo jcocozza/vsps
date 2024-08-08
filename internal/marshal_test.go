@@ -1,19 +1,18 @@
-package main
+package internal
 
 import (
 	"testing"
 
-	"github.com/jcocozza/vsps/internal"
 )
 
 func TestMarshal(t *testing.T) {
 	tests := []struct {
 		name    string
-		input   internal.Account
+		input   Account
 		wantErr bool
 		want    []byte
 	}{
-		{"test1", internal.Account{Name: "my account", Username: "user", Password: "pass"}, false, []byte("my account:\n    username: user\n    password: pass\n")},
+		{"test1", Account{Name: "my account", Username: "user", Password: "pass"}, false, []byte("my account:\n    username: user\n    password: pass\n")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

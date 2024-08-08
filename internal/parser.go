@@ -1,9 +1,7 @@
-package main
+package internal
 
 import (
 	"fmt"
-
-	"github.com/jcocozza/vsps/internal"
 )
 
 type parser struct {
@@ -28,21 +26,18 @@ func (p *parser) consume() {
 	}
 }
 
-func (p *parser) consumeAccount() (internal.Account, error) {
+func (p *parser) consumeAccount() (Account, error) {
 	name := p.currToken
 	p.consume() // consume name
-
 	if p.currToken.kind != DELIM {
-		return internal.Account{}, fmt.Errorf("%v - expected delimeter after account name", p.currToken.pos)
+		return Account{}, fmt.Errorf("%v - expected delimeter after account name", p.currToken.pos)
 	}
 	p.consume() // consume delimeter
-
 	if p.currToken.kind != NESTER {
-		return internal.Account{}, fmt.Errorf("%v - expected nested account information", p.currToken.pos)
+		return Account{}, fmt.Errorf("%v - expected nested account information", p.currToken.pos)
 	}
 	p.consume() // consume nesting whitespace
-
-	acct := internal.Account{
+	acct := Account{
 		Name:     name.value,
 		Username: "",
 		Password: "",
@@ -52,12 +47,11 @@ func (p *parser) consumeAccount() (internal.Account, error) {
 		acctParamName := p.currToken
 		p.consume()
 		if p.currToken.kind != DELIM {
-			return internal.Account{}, fmt.Errorf("%v - expected delimeter after parameter name", p.currToken.pos)
+			return Account{}, fmt.Errorf("%v - expected delimeter after parameter name", p.currToken.pos)
 		}
 		p.consume() // consume delimeter
 		acctParamValue := p.currToken
 		p.consume() // consume value
-
 		if acctParamName.kind == USERNAME {
 			acct.Username = acctParamValue.value
 		} else if acctParamName.kind == PASSWORD {
@@ -75,12 +69,11 @@ func (p *parser) consumeAccount() (internal.Account, error) {
 	}
 }
 
-func (p *parser) Parse() (internal.Accounts, error) {
+func (p *parser) parse() (Accounts, error) {
 	if p.currToken.kind != IDENTIFIER {
 		return nil, fmt.Errorf("%v - unable to parse when identifier is not first element in file", p.currToken.pos)
 	}
-
-	accounts := make(internal.Accounts)
+	accounts := make(Accounts)
 	for p.loc < len(p.tokens) {
 		acct, err := p.consumeAccount()
 		if err != nil {
@@ -92,4 +85,10 @@ func (p *parser) Parse() (internal.Accounts, error) {
 		}
 	}
 	return accounts, nil
+}
+
+// parse a string input into a set of accounts
+func Parser(input string) (Accounts, error) {
+	tokens := initTokenizer(input).Tokenize()
+	return initParser(tokens).parse()
 }
