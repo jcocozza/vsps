@@ -35,7 +35,8 @@ func (p position) String() string {
 type token struct {
 	kind  tokenId
 	value string
-	pos   position
+	// the position of the token is from its starting character
+	pos position
 }
 
 func (t token) String() string {
@@ -45,13 +46,13 @@ func (t token) String() string {
 type tokenizer struct {
 	input string
 	runes []rune
-	// state
-	loc          int
-	currPosition position
-	currChar     string
-	currTokenStr string
-	currTokenPos position
-	tokens       []token
+	// state variables
+	loc          int      // the location in the set of characters
+	currPosition position // the location in the set of characters as a line num & col num
+	currChar     string   // the current character
+	currTokenStr string   // the current token's string value
+	currTokenPos position // the current token's starting position
+	tokens       []token  // the (growing) list of parsed tokens
 }
 
 func initTokenizer(input string) *tokenizer {
@@ -68,6 +69,9 @@ func initTokenizer(input string) *tokenizer {
 	}
 }
 
+// advance 1 character
+//
+// increases the currPosition col by 1
 func (t *tokenizer) consume() {
 	t.loc++
 	t.currPosition.col++
@@ -76,6 +80,10 @@ func (t *tokenizer) consume() {
 	}
 }
 
+// add the current token to the list of output tokens
+//
+// reset the current token string to 0
+// update the current token position to be the current position
 func (t *tokenizer) pushToken(startPos position) {
 	switch t.currTokenStr {
 	case "username":
@@ -89,7 +97,10 @@ func (t *tokenizer) pushToken(startPos position) {
 	t.currTokenPos = t.currPosition
 }
 
-func (t *tokenizer) handleNesting() {
+// parse nested input
+//
+// essentially this deals with account information exluding the account name
+func (t *tokenizer) handleNesting() error {
 	startPos := t.currPosition
 	numSpaces := 1
 	t.consume()
@@ -98,13 +109,14 @@ func (t *tokenizer) handleNesting() {
 		numSpaces++
 	}
 	if numSpaces != 4 && numSpaces != 2 {
-		fmt.Println("total spaces: ", numSpaces)
-		panic(fmt.Sprintf("4 spaces required for nesting %v", t.currPosition))
+		return fmt.Errorf("2 or 4 spaces required for nesting, found %d. %v", numSpaces, t.currPosition.col)
 	}
 	t.tokens = append(t.tokens, token{kind: NESTER, value: "    ", pos: startPos})
 	t.currTokenPos = t.currPosition
+	return nil
 }
 
+// if not at the end, return the next character without advancing
 func (t *tokenizer) peek() string {
 	if t.loc < len(t.runes)-1 {
 		return string(t.runes[t.loc+1])
@@ -112,58 +124,8 @@ func (t *tokenizer) peek() string {
 	return ""
 }
 
-/*
-func (t *tokenizer) Tokenize() []token {
-	tokens := []token{}
-	for t.loc < len(t.runes) {
-		switch {
-		case t.currChar == " ":
-			startPos := t.currPosition
-			numSpaces := 1
-			t.consume()
-			for t.currChar == " " {
-				t.consume()
-				numSpaces++
-			}
-			if numSpaces != 4 && numSpaces != 2 {
-				fmt.Println("total spaces: ", numSpaces)
-				panic("4 spaces required for nesting")
-			}
-			tokens = append(tokens, token{kind: NESTER, value: "    ", pos: startPos})
-		case t.currChar == "\n": // new line means we need to advance the currPosition's line num and reset the col num
-			t.consume()
-			t.currPosition.col = 0
-			t.currPosition.line++
-		case t.currChar == ":":
-			if t.peek() == " " || t.peek() == "\n" {
-				tokens = append(tokens, token{kind: DELIM, value: ":", pos: t.currPosition})
-				t.consume() // consume delimeter
-				t.consume() // consume space after ':'
-				continue
-			}
-		default:
-			str := ""
-			startPos := t.currPosition
-			for t.peek() != "\n" && t.peek() != "" {
-				str += t.currChar
-				t.consume()
-			}
-			str += t.currChar
-			t.consume()
-			if str == "username" {
-				tokens = append(tokens, token{kind: USERNAME, value: str, pos: startPos})
-			} else if str == "password" {
-				tokens = append(tokens, token{kind: PASSWORD, value: str, pos: startPos})
-			} else {
-				tokens = append(tokens, token{kind: IDENTIFIER, value: str, pos: startPos})
-			}
-		}
-	}
-	return tokens
-}
-*/
-
-func (t *tokenizer) Tokenize() []token {
+// convert the string input to a list of tokens
+func (t *tokenizer) Tokenize() ([]token, error) {
 	for t.loc < len(t.runes) {
 		switch {
 		case t.currChar == "\n": // new line means we need to advance the currPosition's line num and reset the col num
@@ -174,7 +136,10 @@ func (t *tokenizer) Tokenize() []token {
 			t.currTokenPos = t.currPosition
 			// if we have nesting, then need to handle it
 			if t.currChar == " " {
-				t.handleNesting()
+				err := t.handleNesting()
+				if err != nil {
+					return nil, err
+				}
 			}
 		case t.currChar == ":":
 			switch t.peek() {
@@ -195,7 +160,7 @@ func (t *tokenizer) Tokenize() []token {
 				// handle the nesting
 				t.handleNesting()
 			case "":
-				panic("FREAK OUT")
+				return nil, fmt.Errorf("unexpected file ending: %v", t.currPosition)
 			default: // it is not a delimeter, so just treat it like a regular char
 				t.currTokenStr += t.currChar
 				t.consume()
@@ -205,5 +170,5 @@ func (t *tokenizer) Tokenize() []token {
 			t.consume()
 		}
 	}
-	return t.tokens
+	return t.tokens, nil
 }

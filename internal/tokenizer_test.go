@@ -26,7 +26,7 @@ func Test_tokenizer_Tokenize(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tknizer := initTokenizer(tt.input)
-			got := tknizer.Tokenize()
+			got, _ := tknizer.Tokenize()
 			for i, tkn := range got {
 				if tkn != tt.want[i] {
 					t.Errorf("tokenizer.Tokenize() = %v, want %v", tkn, tt.want[i])

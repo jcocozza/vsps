@@ -89,6 +89,9 @@ func (p *parser) parse() (Accounts, error) {
 
 // parse a string input into a set of accounts
 func Parser(input string) (Accounts, error) {
-	tokens := initTokenizer(input).Tokenize()
+	tokens, err := initTokenizer(input).Tokenize()
+	if err != nil {
+		return nil, err
+	}
 	return initParser(tokens).parse()
 }
