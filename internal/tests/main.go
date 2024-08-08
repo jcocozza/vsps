@@ -8,14 +8,15 @@ import (
 
 const (
 	test = "test.al"
-	test2 = "vsps.foo"
+	test2 = "vsps.al"
 )
 
 
 func main() {
-	accts, err := internal.Read(test2)
+	accts, err := internal.ReadAndParse(test)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	for _, acct := range accts {
 		fmt.Println(acct)

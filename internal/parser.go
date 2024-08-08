@@ -30,11 +30,11 @@ func (p *parser) consumeAccount() (Account, error) {
 	name := p.currToken
 	p.consume() // consume name
 	if p.currToken.kind != DELIM {
-		return Account{}, fmt.Errorf("%v - expected delimeter after account name", p.currToken.pos)
+		return Account{}, fmt.Errorf("expected delimeter after account name %v", p.currToken.pos)
 	}
 	p.consume() // consume delimeter
 	if p.currToken.kind != NESTER {
-		return Account{}, fmt.Errorf("%v - expected nested account information", p.currToken.pos)
+		return Account{}, fmt.Errorf("expected nested account information %v", p.currToken.pos)
 	}
 	p.consume() // consume nesting whitespace
 	acct := Account{
@@ -47,7 +47,7 @@ func (p *parser) consumeAccount() (Account, error) {
 		acctParamName := p.currToken
 		p.consume()
 		if p.currToken.kind != DELIM {
-			return Account{}, fmt.Errorf("%v - expected delimeter after parameter name", p.currToken.pos)
+			return Account{}, fmt.Errorf("expected delimeter after parameter name %v", p.currToken.pos)
 		}
 		p.consume() // consume delimeter
 		acctParamValue := p.currToken
@@ -59,7 +59,7 @@ func (p *parser) consumeAccount() (Account, error) {
 		} else {
 			err := acct.AddOtherField(acctParamName.value, acctParamValue.value)
 			if err != nil {
-				panic(err)
+				return Account{}, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v", err)
 			}
 		}
 		if p.currToken.kind != NESTER {
@@ -71,7 +71,7 @@ func (p *parser) consumeAccount() (Account, error) {
 
 func (p *parser) parse() (Accounts, error) {
 	if p.currToken.kind != IDENTIFIER {
-		return nil, fmt.Errorf("%v - unable to parse when identifier is not first element in file", p.currToken.pos)
+		return nil, fmt.Errorf("unable to parse when identifier is not first element in file %v", p.currToken.pos)
 	}
 	accounts := make(Accounts)
 	for p.loc < len(p.tokens) {
@@ -81,7 +81,7 @@ func (p *parser) parse() (Accounts, error) {
 		}
 		err = accounts.Add(acct)
 		if err != nil {
-			panic(err)
+			return nil, fmt.Errorf("an error occurred while loading accounts. check if your account file is corrupted: %v", err)
 		}
 	}
 	return accounts, nil

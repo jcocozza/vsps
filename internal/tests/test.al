@@ -1,5 +1,5 @@
 my_acct:
-    foo: bar
+     foo: bar
     bax: bax
     username: user
     password: pass
