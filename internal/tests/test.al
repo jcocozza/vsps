@@ -8,5 +8,3 @@ my_other_acct:
   password: bar
 iso_acct:
   username: foo
-iso_acct:
-  username: foo
