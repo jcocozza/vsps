@@ -5,6 +5,8 @@ import (
 	"math/big"
 )
 
+// TODO: make this way better
+
 const (
 	upperLetters     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	lowerLetters     = "abcdefghijklmnopqrstuvwxyz"
