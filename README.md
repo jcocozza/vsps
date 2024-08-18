@@ -1,8 +1,7 @@
 # VSPS
 vsps is a Very Simple Password Service.
 
-It is primarily focused on being a CLI tool for managing passwords.
-(There is a basic gui, but it will not be supported in the same way the CLI will be)
+It is a CLI tool for managing passwords.
 
 Everything is stored locally.
 
@@ -42,8 +41,6 @@ vsps does not support any special nesting in the al file.
 
 ## Build
 You can build the CLI tool with `go build` from the main directory.
-
-The GUI can be built with `go build` in the gui directory.
 
 (I still need to figure out a proper way to do this)
 
@@ -100,7 +97,7 @@ $vspsCompletion = "$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profil
 ## Encryption
 vsps also offers basic encryption.
 If you like, you can create encrypted accounts.
-In the CLI, this is via the `-e` flag. In the GUI, simply select the 'encrypted accounts' tab to manage your encrypted accounts.
+In the CLI, this is via the `-e` flag.
 
 To encrypt accounts, you will need to provide a master password. This will NOT be persisted ANYWHERE.
 Without it, you cannot access your encrypted passwords.
@@ -115,7 +112,6 @@ You will lose any accounts that are encrypted.
 ## To Do (not in any particular order)
 - Implement Unit tests for testable stuff (maybe?)
 - Clear clipboard after copying after 30-45 sec
-- Open button in GUI
 
 ## Versioning and Releases
 For updating purposes all releases are of the form `vX.Y.Z`.
@@ -125,7 +121,7 @@ For example: `vsps_cli_darwin_amd64_v0.0.1`.
 
 Proper naming in the releases is important because the updater will check the github api for the latest release and will use these formats to update.
 
-As of `v0.0.3`, the CLI has an updater. The GUI does not. (It may never. I'm not nearly as interested in working on the gui)
+As of `v0.0.3`, the CLI has an updater.
 
 ## Caveats
 Account names with spaces in them need to be surrounded with '' when accessing them in the terminal.
