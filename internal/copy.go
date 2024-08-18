@@ -16,7 +16,7 @@ func Copy(text string) error {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("cmd", "/c", "echo "+text+"| clip")
+		cmd = exec.Command("powershell", "-c", "Set-Clipboard", "-Value", fmt.Sprintf("\"%s\"", text))
 	case "darwin":
 		cmd = exec.Command("pbcopy")
 		cmd.Stdin = strings.NewReader(text)

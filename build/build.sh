@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Build the cli, gui is currently not supported.
+# Build the cli
 # Run in the build folder
 # Writes to the bin folder
 

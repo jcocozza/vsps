@@ -3,15 +3,13 @@ package internal
 import (
 	"fmt"
 	"os"
-
-	"gopkg.in/yaml.v3"
 )
 
 type Account struct {
-	Name     string            `yaml:"-"`
-	Username string            `yaml:"username"`
-	Password string            `yaml:"password"`
-	Other    map[string]string `yaml:",inline,omitempty"`
+	Name     string
+	Username string
+	Password string
+	Other    map[string]string
 }
 
 func (acct Account) HasOtherField(name string) bool {
@@ -46,21 +44,12 @@ func (acct Account) CopyPassword() error {
 	return nil
 }
 
-func (a Account) MarshalYAML() (interface{}, error) {
-	data := make(map[string]interface{})
-
-	// Add Name field with nested fields
-	accountData := make(map[string]interface{})
-	accountData["username"] = a.Username
-	accountData["password"] = a.Password
-
-	for key, value := range a.Other {
-		accountData[key] = value
+func (acct Account) CopyUsername() error {
+	err := Copy(acct.Username)
+	if err != nil {
+		return err
 	}
-
-	data[a.Name] = accountData
-
-	return data, nil
+	return nil
 }
 
 // Account writer wrapper
@@ -79,12 +68,12 @@ func (acct Account) write(filepath string) error {
 		return err
 	}
 
-	acctYaml, err := yaml.Marshal(acct)
+	acctAl, err := Marshal(acct)
 	if err != nil {
 		return err
 	}
 
-	_, err0 := file.Write(acctYaml)
+	_, err0 := file.Write(acctAl)
 	if err0 != nil {
 		return err0
 	}
@@ -98,16 +87,16 @@ func (acct Account) writeEncrypted(filepath, masterpass string) error {
 		return err
 	}
 
-	acctYaml, err := yaml.Marshal(acct)
+	acctAl, err := Marshal(acct)
 	if err != nil {
 		return err
 	}
 
-	encryptedAcctYaml, err := Encryptor(masterpass, acctYaml)
+	encryptedAcctAl, err := Encryptor(masterpass, acctAl)
 	if err != nil {
 		return err
 	}
-	_, err0 := file.Write(encryptedAcctYaml)
+	_, err0 := file.Write(encryptedAcctAl)
 	if err0 != nil {
 		return err0
 	}
@@ -117,8 +106,8 @@ func (acct Account) writeEncrypted(filepath, masterpass string) error {
 // print the account in proper format for terminal
 func (acct Account) Print() {
 	fmt.Printf("%s\n", acct.Name)
-	fmt.Printf("  Username: %s\n", acct.Username)
-	fmt.Printf("  Password: %s\n", acct.Password)
+	fmt.Printf("  username: %s\n", acct.Username)
+	fmt.Printf("  password: %s\n", acct.Password)
 	for key, value := range acct.Other {
 		fmt.Printf("  %s: %s\n", key, value)
 	}
