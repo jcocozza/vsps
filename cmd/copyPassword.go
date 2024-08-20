@@ -8,7 +8,7 @@ import (
 )
 
 var copyPasswordCommand = &cobra.Command{
-	Use:               "pcopy [account name]",
+	Use:               "pc [account name]",
 	Short:             "copy the password of the account to your clipboard",
 	Args:              cobra.ExactArgs(1),
 	ValidArgsFunction: ValidAccountNames,
