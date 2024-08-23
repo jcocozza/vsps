@@ -7,9 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var copyPasswordCommand = &cobra.Command{
-	Use:               "pc [account name]",
-	Short:             "copy the password of the account to your clipboard",
+var copyUsernameCommand = &cobra.Command{
+	Use:               "uc [account name]",
+	Short:             "copy the username of the account to your clipboard",
 	Args:              cobra.ExactArgs(1),
 	ValidArgsFunction: ValidAccountNames,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -25,15 +25,15 @@ var copyPasswordCommand = &cobra.Command{
 			return
 		}
 
-		err = acct.CopyPassword()
+		err = acct.CopyUsername()
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
-		fmt.Printf("successfully copied password for %s.", acct.Name)
+		fmt.Printf("successfully copied username for %s.", acct.Name)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(copyPasswordCommand)
+	rootCmd.AddCommand(copyUsernameCommand)
 }
