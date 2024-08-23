@@ -64,8 +64,10 @@ func downloadAndReplaceBinary(url string) error {
 		return err
 	}
 
-	if err := tmpFile.Chmod(0755); err != nil {
-		return err
+	if runtime.GOOS != "windows" {
+		if err := tmpFile.Chmod(0755); err != nil {
+			return err
+		}
 	}
 
 	binaryPath, err := os.Executable()
@@ -73,16 +75,24 @@ func downloadAndReplaceBinary(url string) error {
 		return err
 	}
 
+	backupPath := binaryPath + ".bak"
+	if err := os.Rename(binaryPath, backupPath); err != nil {
+		return fmt.Errorf("failed to backup existing binary: %v", err)
+	}
+
 	if err := os.Rename(tmpFile.Name(), binaryPath); err != nil {
+		// Attempt to restore backup if rename fails
+		os.Rename(backupPath, binaryPath)
 		return err
 	}
 
+	os.Remove(backupPath)
 	return nil
 }
 
 var updateVsps = &cobra.Command{
 	Use:   "update-vsps",
-	Short: "update vsps to the latest version",
+	Short: "update vsps to the latest version. may require sudo depending on where vsps is stored.",
 	Long: `update vsps to the latest version. this will not touch the underlying al file.
 even if the update goes wrong, your infomation will be fine.`,
 	Run: func(cmd *cobra.Command, args []string) {
