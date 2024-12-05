@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 	for _, acct := range accts {
-		fmt.Println(acct)
+		fmt.Println(acct.Password)
 	}
 	fmt.Println("there are ", len(accts), " accounts")
 }

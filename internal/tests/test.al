@@ -8,3 +8,6 @@ my_other_acct:
   password: bar
 iso_acct:
   username: foo
+foo_acct:
+  username: foo:bar:baz
+  password: foo:bar:baz

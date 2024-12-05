@@ -157,7 +157,10 @@ func (t *tokenizer) Tokenize() ([]token, error) {
 				t.currPosition.col = 0
 				t.currPosition.line++
 				t.currTokenPos = t.currPosition
-				// handle the nesting
+				err := t.handleNesting()
+				if err != nil {
+					return nil, err
+				}
 				t.handleNesting()
 			case "":
 				return nil, fmt.Errorf("unexpected file ending: %v", t.currPosition)
