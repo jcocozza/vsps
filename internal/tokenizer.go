@@ -161,7 +161,6 @@ func (t *tokenizer) Tokenize() ([]token, error) {
 				if err != nil {
 					return nil, err
 				}
-				t.handleNesting()
 			case "":
 				return nil, fmt.Errorf("unexpected file ending: %v", t.currPosition)
 			default: // it is not a delimeter, so just treat it like a regular char
