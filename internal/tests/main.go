@@ -13,7 +13,7 @@ const (
 
 
 func main() {
-	accts, err := internal.ReadAndParse(test)
+	accts, err := internal.ReadAndParse(test2)
 	if err != nil {
 		fmt.Println(err)
 		return

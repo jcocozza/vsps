@@ -126,10 +126,12 @@ func (t *tokenizer) peek() string {
 
 // convert the string input to a list of tokens
 func (t *tokenizer) Tokenize() ([]token, error) {
+	isPhrase := false
 	for t.loc < len(t.runes) {
 		switch {
 		case t.currChar == "\n": // new line means we need to advance the currPosition's line num and reset the col num
 			t.pushToken(t.currTokenPos)
+			isPhrase = false
 			t.consume()
 			t.currPosition.col = 0
 			t.currPosition.line++
@@ -149,17 +151,29 @@ func (t *tokenizer) Tokenize() ([]token, error) {
 				t.consume() // consume ":"
 				t.consume() // consume " " after the delimeter
 				t.currTokenPos = t.currPosition
-			case "\n": // after a delim + newline, we expect nesting
-				t.pushToken(t.currTokenPos)
-				t.tokens = append(t.tokens, token{kind: DELIM, value: ":", pos: t.currPosition})
-				t.consume() // consume delimeter
+				isPhrase = true
+			case "\n":
+				if isPhrase { // we have reached the end of the phrase and it happens that it ends in a ":"
+					t.currTokenStr += t.currChar
+					t.consume()
+					t.pushToken(t.currTokenPos)
+					isPhrase = false
+				} else { // after a delim + newline, we expect nesting
+					t.pushToken(t.currTokenPos)
+					t.tokens = append(t.tokens, token{kind: DELIM, value: ":", pos: t.currPosition})
+					t.consume() // consume delimeter
+					isPhrase = true
+				}
 				t.consume() // consume newline
 				t.currPosition.col = 0
 				t.currPosition.line++
 				t.currTokenPos = t.currPosition
-				err := t.handleNesting()
-				if err != nil {
-					return nil, err
+
+				if t.currChar == " " {
+					err := t.handleNesting()
+					if err != nil {
+						return nil, err
+					}
 				}
 			case "":
 				return nil, fmt.Errorf("unexpected file ending: %v", t.currPosition)
