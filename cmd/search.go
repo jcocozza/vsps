@@ -38,17 +38,26 @@ var searchAccount = &cobra.Command{
 		for len(lst) == 0 {
 			lst = searchForAccount(accts)
 		}
-		fmt.Println(strings.Join(lst, ", "))
-
-		fmt.Print("enter acct: ")
-		acctName, _ := readInput(reader)
-		acct, err := accts.Get(acctName)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
+		if len(lst) == 1 {
+			acctName := lst[0]
+			acct, err := accts.Get(acctName)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+			acct.Print()
+		} else {
+			fmt.Println(strings.Join(lst, ", "))
+			fmt.Print("enter acct: ")
+			acctName, _ := readInput(reader)
+			acct, err := accts.Get(acctName)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+			fmt.Println("----------")
+			acct.Print()
 		}
-		fmt.Println("----------")
-		acct.Print()
 	},
 }
 
