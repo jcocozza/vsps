@@ -16,7 +16,7 @@ import (
 var accountsFilePath string
 var masterpassword string
 
-const version string = "v0.2.0"
+const version string = "v0.2.1"
 
 var rootCmd = &cobra.Command{
 	Use:   "vsps",
