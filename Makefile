@@ -1,10 +1,6 @@
 APP_NAME=vsps
-VERSION=v0.2.1
+VERSION=v0.2.2
 BUILD_DIR=bin/$(VERSION)
-
-# OUT_NAME=$(APP_NAME)_$(OS)_$(ARCH)_$(VERSION)
-# TARBALL=$(OUT_NAME).tar.gz
-# ZIPFILE=$(OUT_NAME).zip
 
 CHECKVERSION=$(shell grep 'const version' cmd/root.go | sed 's/.*= "\(.*\)"/\1/')
 check-version:
