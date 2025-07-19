@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/f1bonacc1/glippy"
+	"github.com/atotto/clipboard"
 )
 
 func ClearClipboard() error {
@@ -10,6 +10,6 @@ func ClearClipboard() error {
 
 // Send text to the clipboard
 func Copy(text string) error {
-	return glippy.Set(text)
+	return clipboard.WriteAll(text)
 }
 
